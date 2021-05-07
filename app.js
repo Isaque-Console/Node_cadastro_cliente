@@ -4,7 +4,7 @@ const { Client } = require('pg'); // criando uma comunicação com o postgres
 const dotenv = require('dotenv'); // habilitando a utilização do dotenv
 require('dotenv').config();
 
-
+//dados para se comunicar com o postgres
 const client = new Client({
     host: process.env.HOST,
     user:process.env.DB_USER,
@@ -16,18 +16,18 @@ client.connect();
 
 
 app.use(express.json());
-
+//busca os dados de todos os clientes
 app.get('/', async (req, res) => {
     const result = await client.query('SELECT id,nome,email,cpf_cnpj,telefone,cep,logradouro,numero,bairro,cidade,estado,cadastro_pessoa FROM cliente;');
     return res.send(result);
 });
-
+//busca os dados de um cliente apenas
  app.get('/:id', async (req, res) => {
      const idCliente = req.params.id;
      const result = await client.query('SELECT id,nome,email,cpf_cnpj,telefone,cep,logradouro,numero,bairro,cidade,estado,cadastro_pessoa FROM cliente WHERE id = $1;', [idCliente]);
      return res.send(result);
  });
-
+//salva um novo cadastro de cliente
  app.post ('/', (req,res) => {
      const postMessage = "Succesfully post";
     const { nome,email,cpf_cnpj,telefone,cep,logradouro,numero,bairro,cidade,estado} = req.body;
@@ -44,7 +44,7 @@ app.get('/', async (req, res) => {
     }
     return res.send(postMessage);
  });
-
+//atualiza o cadastro de um cliente
  app.put('/:id', (req,res) => {
     const putMessage = "Successfully put";
     const id = req.params.id;
@@ -62,7 +62,7 @@ app.get('/', async (req, res) => {
     }
     return res.send(putMessage);
  });
-
+//deleta o cadastro de um cliente
 app.delete('/:id', (req,res) => {
     const deleteMessage = "Successfully delete";
     const id = req.params.id;
